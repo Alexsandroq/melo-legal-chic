@@ -1,24 +1,92 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Header } from "@/components/site/Header";
+import { Hero } from "@/components/site/Hero";
+import { Footer } from "@/components/site/Footer";
+import { WhatsAppButton } from "@/components/site/WhatsAppButton";
+import {
+  AboutLawyer,
+  ClientProblems,
+  Contact,
+  Differentials,
+  EditorialSection,
+  Faq,
+  FinalCTA,
+  PracticeAreas,
+  Positioning,
+  Process,
+} from "@/components/site/Sections";
+import { FAQS } from "@/components/site/data";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+const TITLE = "Fernando Melo | Advogado Trabalhista em Presidente Prudente";
+const DESCRIPTION =
+  "Fernando Melo, advogado trabalhista em Presidente Prudente – SP. Orientação jurídica e atendimento personalizado em Direito do Trabalho.";
+
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: TITLE },
+      { name: "description", content: DESCRIPTION },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESCRIPTION },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "/" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [{ rel: "canonical", href: "/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "LegalService",
+          name: "Fernando Melo — Advocacia Trabalhista",
+          description: DESCRIPTION,
+          areaServed: "Presidente Prudente, SP",
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: "Presidente Prudente",
+            addressRegion: "SP",
+            addressCountry: "BR",
+          },
+          knowsAbout: ["Direito do Trabalho", "Consultoria Trabalhista"],
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: FAQS.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }),
+      },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-background">
+      <Header />
+      <main>
+        <Hero />
+        <Positioning />
+        <PracticeAreas />
+        <ClientProblems />
+        <AboutLawyer />
+        <Differentials />
+        <EditorialSection />
+        <Process />
+        <Faq />
+        <FinalCTA />
+        <Contact />
+      </main>
+      <Footer />
+      <WhatsAppButton />
     </div>
   );
 }
